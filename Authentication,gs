@@ -1,0 +1,293 @@
+/**
+ * Authentication Module
+ * 
+ * Handles user authentication, session management, password resets, etc.
+ */
+
+const Authentication = (function() {
+  /**
+   * Login function to authenticate users
+   * @param {string} email - User email
+   * @param {string} password - User password
+   * @return {Object} Login result with session token if successful
+   */
+  function login(email, password) {
+    try {
+      // Find user by email
+      const user = Database.getUserByEmail(email);
+      
+      if (!user) {
+        return { success: false, message: 'User not found' };
+      }
+      
+      // Check if user is active
+      if (user.Status !== 'Active') {
+        return { success: false, message: 'Account has been deactivated. Please contact administrator.' };
+      }
+      
+      // Verify password
+      if (!verifyPassword(password, user.Password)) {
+        return { success: false, message: 'Invalid password' };
+      }
+      
+      // Generate session token
+      const sessionToken = generateSessionToken();
+      const  roleID = user.Role.toLowerCase().replace(/\s+/g, '_');
+      const permissions = Permissions.getUserPermissions(roleID);
+      const menus = Permissions.getUserMenus(roleID);
+      
+      // Save session to cache
+      const sessionData = {
+        userId: user.UserID,
+        userEmail: user.Email,
+        userFirstName: user.FirstName,
+        userLastName: user.LastName,
+        userRole: user.Role,
+        permissions: permissions,
+        timestamp: new Date().getTime()
+      };
+      
+      const cache = CacheService.getUserCache();
+      cache.put(sessionToken, JSON.stringify(sessionData), CACHE_EXPIRATION_TIME);
+      
+      // Update last login timestamp
+      Database.updateUserLastLogin(user.UserID);
+      
+      // Return success with token and user info
+      return {
+        success: true,
+        token: sessionToken,
+        user: {
+          id: user.UserID,
+          email: user.Email,
+          firstName: user.FirstName,
+          lastName: user.LastName,
+          role: user.Role,
+          ProfileImage:user.ProfileImage
+        },
+        menus: menus,
+        permissions: permissions
+      };
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      return { success: false, message: 'An error occurred during login' };
+    }
+  }
+  
+  /**
+   * Validates a session token
+   * @param {string} token - The session token to validate
+   * @return {Object|null} Session data if valid, null otherwise
+   */
+  function validateSession(token) {
+    if (!token) return null;
+    
+    try {
+      const cache = CacheService.getUserCache();
+      const sessionData = cache.get(token);
+      
+      if (!sessionData) return null;
+      
+      const session = JSON.parse(sessionData);
+      const currentTime = new Date().getTime();
+      
+      // Check if session has expired (3 hours)
+      if (currentTime - session.timestamp > 3 * 60 * 60 * 1000) {
+        cache.remove(token);
+        return null;
+      }
+      
+      // Update session timestamp
+      session.timestamp = currentTime;
+      cache.put(token, JSON.stringify(session), CACHE_EXPIRATION_TIME);
+      
+      return session;
+    } catch (error) {
+      console.error('Session validation error:', error);
+      return null;
+    }
+  }
+  
+  /**
+   * Logs out a user by removing their session
+   * @param {string} token - Session token to invalidate
+   * @return {boolean} Success status
+   */
+  function logout(token) {
+    try {
+      if (!token) return true;
+      
+      const cache = CacheService.getUserCache();
+      cache.remove(token);
+      return true;
+    } catch (error) {
+      console.error('Logout error:', error);
+      return false;
+    }
+  }
+  
+  /**
+   * Initiates password reset process
+   * @param {string} email - User email
+   * @return {Object} Result of reset request
+   */
+  function requestPasswordReset(email) {
+    try {
+      const user = Database.getUserByEmail(email);
+      
+      if (!user) {
+        return { success: false, message: 'Email not found in our records' };
+      }
+      
+      // Generate a reset token and save it
+      const resetToken = generateUUID();
+      const expiryTime = new Date();
+      expiryTime.setHours(expiryTime.getHours() + 24); // Token valid for 24 hours
+      
+      // Save token to user record
+      Database.savePasswordResetToken(user.ID, resetToken, expiryTime);
+      
+      // In a real system, we would send an email here with the reset link
+      // For demonstration, we'll just return the token
+      return { 
+        success: true, 
+        message: 'If the email exists in our system, a password reset link has been sent', 
+        token: resetToken // In production, this would not be returned to the UI
+      };
+    } catch (error) {
+      console.error('Reset request error:', error);
+      return { success: false, message: 'An error occurred while processing your request' };
+    }
+  }
+  
+  /**
+   * Completes password reset with new password
+   * @param {string} token - Reset token
+   * @param {string} newPassword - New password
+   * @return {Object} Result of password reset
+   */
+  function resetPassword(token, newPassword) {
+    try {
+      // Validate token and get user
+      const user = Database.getUserByResetToken(token);
+      
+      if (!user) {
+        return { success: false, message: 'Invalid or expired reset token' };
+      }
+      
+      // Hash new password
+      const hashedPassword = hashPassword(newPassword);
+      
+      // Update user password and clear reset token
+      Database.updateUserPassword(user.ID, hashedPassword);
+      
+      return { success: true, message: 'Password has been reset successfully' };
+    } catch (error) {
+      console.error('Password reset error:', error);
+      return { success: false, message: 'An error occurred while resetting your password' };
+    }
+  }
+  
+  /**
+   * Changes user password (when already logged in)
+   * @param {string} userId - User ID
+   * @param {string} currentPassword - Current password
+   * @param {string} newPassword - New password
+   * @return {Object} Result of password change
+   */
+  function changePassword(userId, currentPassword, newPassword) {
+    try {
+      const user = Database.getUserById(userId);
+      
+      if (!user) {
+        return { success: false, message: 'User not found' };
+      }
+      
+      // Verify current password
+      if (!verifyPassword(currentPassword, user.Password)) {
+        return { success: false, message: 'Current password is incorrect' };
+      }
+      
+      // Hash new password
+      const hashedPassword = hashPassword(newPassword);
+      
+      // Update user password
+      Database.updateUserPassword(userId, hashedPassword);
+      
+      return { success: true, message: 'Password changed successfully' };
+    } catch (error) {
+      console.error('Password change error:', error);
+      return { success: false, message: 'An error occurred while changing your password' };
+    }
+  }
+  
+
+  
+  /**
+   * Generates a unique session token
+   * @return {string} Session token
+   */
+  function generateSessionToken() {
+    return Utilities.getUuid();
+  }
+  
+  /**
+   * Deactivates a user account
+   * @param {string} userId - ID of user to deactivate
+   * @return {Object} Result of deactivation
+   */
+  function deactivateUser(userId) {
+    try {
+      const user = Database.getUserById(userId);
+      
+      if (!user) {
+        return { success: false, message: 'User not found' };
+      }
+      
+      // Update user status
+      Database.updateUserStatus(userId, 'Inactive');
+      
+      return { success: true, message: 'User deactivated successfully' };
+    } catch (error) {
+      console.error('User deactivation error:', error);
+      return { success: false, message: 'An error occurred while deactivating the user' };
+    }
+  }
+  
+  /**
+   * Activates a user account
+   * @param {string} userId - ID of user to activate
+   * @return {Object} Result of activation
+   */
+  function activateUser(userId) {
+    try {
+      const user = Database.getUserById(userId);
+      
+      if (!user) {
+        return { success: false, message: 'User not found' };
+      }
+      
+      // Update user status
+      Database.updateUserStatus(userId, 'Active');
+      
+      return { success: true, message: 'User activated successfully' };
+    } catch (error) {
+      console.error('User activation error:', error);
+      return { success: false, message: 'An error occurred while activating the user' };
+    }
+  }
+  
+  // Return public methods
+  return {
+    login: login,
+    validateSession: validateSession,
+    logout: logout,
+    requestPasswordReset: requestPasswordReset,
+    resetPassword: resetPassword,
+    changePassword: changePassword,
+    createUser: createUser,
+    deactivateUser: deactivateUser,
+    activateUser: activateUser
+  };
+})();
