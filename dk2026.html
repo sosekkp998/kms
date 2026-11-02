@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Kinerja 2026</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Open Sans', sans-serif;
+    }
+    .dashboard-title {
+      text-align: center;
+      margin: 20px 0 30px;
+      color: #4e73df;
+    }
+    .chart-card {
+      margin-bottom: 25px;
+      transition: all 0.3s;
+      border: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .chart-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .card-header {
+      background: linear-gradient(135deg, #4e73df, #224abe);
+      color: white;
+      font-weight: 600;
+    }
+    iframe {
+      width: 100%;
+      border: 0;
+      min-height: 320px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER BARU - Lebih Menarik -->
+<div class="container mt-4">
+  <div class="header-dashboard text-center py-5 mb-5" 
+       style="background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); 
+              color: white; 
+              border-radius: 15px; 
+              box-shadow: 0 10px 25px rgba(78, 115, 223, 0.3);">
+    
+    <div class="container">
+      <!-- Icon -->
+      <div class="mb-3">
+        <i class="fas fa-chart-line fa-4x" style="opacity: 0.9;"></i>
+      </div>
+      
+      <!-- Judul Utama -->
+      <h1 class="display-4 fw-bold mb-3 text-white" 
+          style="text-shadow: 0 3px 10px rgba(0,0,0,0.3); letter-spacing: 1px;">
+        Dashboard Kinerja BBRSEKP
+      </h1>
+      
+      <!-- Tahun -->
+      <h2 class="h3 mb-4 fw-light" style="opacity: 0.95;">
+        Tahun 2026
+      </h2>
+      
+      <!-- Deskripsi -->
+      <div class="col-lg-10 mx-auto">
+        <p class="lead mb-0" style="font-size: 1.1rem; opacity: 0.95;">
+          Pengukuran capaian kinerja BBRSEKP tahun 2026 dilakukan dengan cara 
+          <strong>membandingkan antara target dan realisasi</strong> indikator kinerja utama.
+        </p>
+      </div>
+      
+      <!-- Garis pemisah -->
+      <div class="mt-4">
+        <hr style="width: 80px; margin: 20px auto; border-top: 3px solid rgba(255,255,255,0.6);">
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="row">
+
+    <!-- Grafik 1 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Realisasi Keuangan 1</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=680721234&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 2 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Realisasi Keuangan 2</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1761166599&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 3 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 3</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1317839303&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 4 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 4</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1943637715&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 5 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 5</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1368055482&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 6 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 6</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1936117061&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 7 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 7</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1203490784&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 8 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 8</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1417392526&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 9 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 9</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=379785103&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik 10 -->
+    <div class="col-lg-6 col-md-12">
+      <div class="card chart-card">
+        <div class="card-header text-center">Grafik Realisasi 10</div>
+        <div class="card-body p-0">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRTIPHHqOvhiHQ81jzWli_ma7umB8J5XPoaouY7tDHO0BIB7ezvOIjDb1PAt22vtCtl7_YxDft66-5y/pubchart?oid=1878293529&format=interactive" allowfullscreen></iframe>
+        </div>
+        <div class="card-footer text-center">
+          <a href="https://docs.google.com/spreadsheets/d/1Y6XhCwmX_NzQbf_4rx0Ci4GN70O-NHNNKyng9KfKuzU/edit?usp=sharing" target="_blank" class="btn btn-sm btn-primary">Update Data</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
