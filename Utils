@@ -1,0 +1,152 @@
+/**
+ * Utility Functions
+ * 
+ * Contains various helper functions used throughout the application
+ */
+
+/**
+ * Generates a random UUID
+ * @return {string} UUID
+ */
+function generateUUID() {
+  return Utilities.getUuid();
+}
+
+/**
+ * Hashes a password using a simple hash function
+ * Note: In a production environment, use a more secure hashing algorithm
+ * @param {string} password - Plain text password
+ * @return {string} Hashed password
+ */
+function hashPassword(password) {
+  // In a real app, we would use a stronger hashing algorithm
+  // For this demo, we'll use a simple hash
+  return Utilities.base64EncodeWebSafe(
+    Utilities.computeDigest(
+      Utilities.DigestAlgorithm.SHA_256,
+      password
+    )
+  );
+}
+
+
+function generateID3(table, colid, str) {
+  const db = new Database1();
+  const records = db.getAll(table);
+
+  let lastNumber = 0;
+
+  for (const record of records) {
+    const idValue = record[colid];
+    
+    if (typeof idValue === 'string' && idValue.startsWith(str + '_')) { 
+      // Extract numeric part after the last underscore
+      const parts = idValue.split('_');
+      const numPart = parseInt(parts[parts.length - 1], 10);
+      
+      if (!isNaN(numPart) && numPart > lastNumber) {
+        lastNumber = numPart;
+      }
+    }
+  }
+
+  return `${str}_${(lastNumber + 1).toString().padStart(4, '0')}`;
+}
+
+
+/**
+ * Verifies a password against a hash
+ * @param {string} password - Plain text password
+ * @param {string} hash - Stored hash
+ * @return {boolean} Whether the password matches
+ */
+function verifyPassword(password, hash) {
+  const passwordHash = hashPassword(password);
+  return passwordHash === hash;
+}
+
+/**
+ * Formats a date to a readable string
+ * @param {string} dateString - ISO date string
+ * @return {string} Formatted date string
+ */
+function formatDate(dateString) {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  return Utilities.formatDate(date, Session.getScriptTimeZone(), 'MMM dd, yyyy');
+}
+
+/**
+ * Formats a date-time to a readable string
+ * @param {string} dateString - ISO date string
+ * @return {string} Formatted date-time string
+ */
+function formatDateTime(dateString) {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  return Utilities.formatDate(date, Session.getScriptTimeZone(), 'MMM dd, yyyy HH:mm');
+}
+
+/**
+ * Sanitizes a string for HTML output
+ * @param {string} str - Input string
+ * @return {string} Sanitized string
+ */
+function sanitizeHtml(str) {
+  if (!str) return '';
+  
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Validates an email address format
+ * @param {string} email - Email address to validate
+ * @return {boolean} Whether the email is valid
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Validates a password strength
+ * Must be at least 8 characters, include uppercase, lowercase, and a number
+ * @param {string} password - Password to validate
+ * @return {boolean} Whether the password is valid
+ */
+function isValidPassword(password) {
+  if (!password || password.length < 8) return false;
+  
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) return false;
+  
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) return false;
+  
+  // Check for at least one number
+  if (!/[0-9]/.test(password)) return false;
+  
+  return true;
+}
+
+/**
+ * Handles API errors and returns a standardized response
+ * @param {Error} error - Error object
+ * @return {Object} Standardized error response
+ */
+function handleApiError(error) {
+  console.error('API Error:', error);
+  
+  return {
+    success: false,
+    message: 'An unexpected error occurred',
+    error: error.toString()
+  };
+}
