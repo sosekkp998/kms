@@ -1,0 +1,2208 @@
+<script>
+
+function showSection(section) {
+  // 🔥 Simpan halaman aktif
+  sessionStorage.setItem('currentpage', section);
+
+  // 🔥 Update highlight sidebar
+  $('#sidebarMenu li').removeClass('active');
+
+  $('#sidebarMenu a').each(function () {
+    const onclickAttr = $(this).attr('onclick');
+    if (onclickAttr && onclickAttr.includes(`'${section}'`)) {
+      $(this).parent().addClass('active');
+    }
+  });
+
+  const contentDiv = document.getElementById('mainContent');
+  contentDiv.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';
+
+  
+
+  switch (section) {
+    case 'dashboard':
+      loadrealisasidetail();//diganti dari dashboarddisplay
+      break;
+    case 'users':
+      loadUsers();
+      break;
+    case 'leave':
+      loadLeave();
+      break;
+    case 'forgotPassword':
+      loadforgotPassword();
+      break;
+    case 'permission':
+      loadpermission();
+      break;
+    case 'profile':
+      loadProfile();
+      break;
+    case 'account':
+      loadaccount();
+      break;
+
+    case 'settingsub':
+      loadpermission();
+      break;
+
+    case 'realisasi':
+      loadrealisasi();
+      break;
+
+    case 'realisasi-detail':
+      loadrealisasidetail();
+      break;
+
+    case 'menu-4':
+      menu4();
+      break;
+
+    case 'dashboard-kinerja-2026':
+      dashboardRealisasi2026();   // nama function baru
+      break;
+
+    case 'dashboard-rpd-2026':
+      dashboardRpd2026();   // nama function baru
+      break;    
+
+    case 'lembur':
+      window.open("https://forms.gle/YndedhHa2RG5m33U9", "_blank");
+      break;
+
+    case 'cuti':
+      window.open("https://form.jotform.com/222558575055058", "_blank");
+      break;
+
+    case 'terlambat-pulcep-non':
+      window.open("https://form.jotform.com/222921138115044", "_blank");
+      break;
+
+    case 'logbook':
+      window.open("https://form.jotform.com/240301316842445", "_blank");
+      break;
+
+    case 'persuratan':
+      window.open("https://drive.google.com/drive/folders/1dKVqd9n4kfT-SWCk_Sno8dGbyLFexrqt?usp=sharing", "_blank");
+      break;
+
+    case 'buku':
+      buku();   // nama function baru
+      break;
+
+  }
+}
+
+function loadrealisasidetail() {
+  const contentDiv = document.getElementById('mainContent');
+
+  // Tampilkan loading sementara
+  contentDiv.innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3">Memuat halaman Realisasi Detail...</p>
+    </div>
+  `;
+
+  // Panggil server-side untuk ambil isi file tes.html
+  google.script.run
+    .withSuccessHandler(function(htmlContent) {
+      // Render isi tes.html ke dalam mainContent
+      contentDiv.innerHTML = htmlContent;
+    })
+    .withFailureHandler(function(error) {
+      contentDiv.innerHTML = `
+        <div class="alert alert-danger m-4 text-center">
+          <strong>Gagal memuat halaman Realisasi Detail</strong><br>
+          <small>Error: ${error.message || 'Unknown error'}</small>
+        </div>
+      `;
+      console.error('Error load tes.html:', error);
+    })
+    .getTesHtmlContent();  // nama fungsi di Code.gs
+}
+
+function menu4() {
+  const contentDiv = document.getElementById('mainContent');
+
+  // Tampilkan loading sementara
+  contentDiv.innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3">Memuat halaman...</p>
+    </div>
+  `;
+
+  // Panggil server-side untuk ambil isi file menu4.html
+  google.script.run
+    .withSuccessHandler(function(htmlContent) {
+      // Render isi menu4.html ke dalam mainContent
+      contentDiv.innerHTML = htmlContent;
+    })
+    .withFailureHandler(function(error) {
+      contentDiv.innerHTML = `
+        <div class="alert alert-danger m-4 text-center">
+          <strong>Gagal memuat halaman</strong><br>
+          <small>Error: ${error.message || 'Unknown error'}</small>
+        </div>
+      `;
+      console.error('Error load menu4.html:', error);
+    })
+    .getMenu4HtmlContent();  // nama fungsi di Code.gs
+}
+
+function dashboardRealisasi2026() {
+  const contentDiv = document.getElementById('mainContent');
+
+  // Tampilkan loading sementara
+  contentDiv.innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3">Memuat Dashboard Realisasi 2026...</p>
+    </div>
+  `;
+
+  // Panggil server-side untuk ambil isi file dk2026.html
+  google.script.run
+    .withSuccessHandler(function(htmlContent) {
+      contentDiv.innerHTML = htmlContent;
+    })
+    .withFailureHandler(function(error) {
+      contentDiv.innerHTML = `
+        <div class="alert alert-danger m-4 text-center">
+          <strong>Gagal memuat halaman</strong><br>
+          <small>Error: ${error.message || 'Unknown error'}</small>
+        </div>
+      `;
+      console.error('Error load dk2026.html:', error);
+    })
+    .getDk2026HtmlContent();   // ← Nama function di Code.gs
+}
+
+function dashboardRpd2026() {
+  const contentDiv = document.getElementById('mainContent');
+
+  // Tampilkan loading sementara
+  contentDiv.innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3">Memuat Dashboard RPD 2026...</p>
+    </div>
+  `;
+
+  // Panggil server-side untuk ambil isi file rpd2026.html
+  google.script.run
+    .withSuccessHandler(function(htmlContent) {
+      contentDiv.innerHTML = htmlContent;
+    })
+    .withFailureHandler(function(error) {
+      contentDiv.innerHTML = `
+        <div class="alert alert-danger m-4 text-center">
+          <strong>Gagal memuat halaman</strong><br>
+          <small>Error: ${error.message || 'Unknown error'}</small>
+        </div>
+      `;
+      console.error('Error load rpd2026.html:', error);
+    })
+    .getRpd2026HtmlContent();   // ← Nama function di Code.gs
+}
+
+function buku() {
+  const contentDiv = document.getElementById('mainContent');
+
+  // Tampilkan loading sementara
+  contentDiv.innerHTML = `
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
+      <p class="mt-3">Memuat Buku ...</p>
+    </div>
+  `;
+
+  // Panggil server-side untuk ambil isi file buku.html
+  google.script.run
+    .withSuccessHandler(function(htmlContent) {
+      contentDiv.innerHTML = htmlContent;
+    })
+    .withFailureHandler(function(error) {
+      contentDiv.innerHTML = `
+        <div class="alert alert-danger m-4 text-center">
+          <strong>Gagal memuat halaman</strong><br>
+          <small>Error: ${error.message || 'Unknown error'}</small>
+        </div>
+      `;
+      console.error('Error load buku.html:', error);
+    })
+    .getBukuHtmlContent();   // ← Nama function di Code.gs
+}
+
+function loadrealisasi() {
+  const contentDiv = document.getElementById('mainContent');
+
+  let html = `
+    <div class="container mt-4">
+      <h2 class="mb-4 text-center">Realisasi Data</h2>
+      <p class="text-center text-muted mb-5">Grafik dan dashboard realisasi</p>
+
+      <!-- Iframe 1: Realisasi Keuangan (sudah ada) -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="card-header py-3 bg-primary text-white">
+              <h6 class="m-0">Realisasi Keuangan</h6>
+            </div>
+            <div class="card-body p-0">
+              <div id="looker-placeholder-1" style="height:800px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+                <div class="spinner-border text-primary me-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                <div>
+                  <strong>Memuat Dashboard...</strong><br>
+                  <small class="text-muted">Tunggu beberapa detik</small>
+                </div>
+              </div>
+
+              <iframe 
+                id="looker-iframe-1"
+                src="https://lookerstudio.google.com/embed/reporting/273d019c-7680-48ed-81a9-7faf871e80e7/page/page_12345"
+                width="100%"
+                height="800"
+                frameborder="0"
+                style="border:0; display:none;"
+                allowfullscreen
+                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Iframe 2: Tambahan baru (contoh: Grafik Realisasi 2) -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="card-header py-3 bg-primary text-white">
+              <h6 class="m-0">Grafik Realisasi 2</h6>
+            </div>
+            <div class="card-body p-0">
+              <div id="looker-placeholder-2" style="height:500px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+                <div class="spinner-border text-primary me-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                <div>
+                  <strong>Memuat Grafik...</strong><br>
+                  <small class="text-muted">Tunggu beberapa detik</small>
+                </div>
+              </div>
+
+              <iframe 
+                id="looker-iframe-2"
+                src="https://lookerstudio.google.com/embed/reporting/273d019c-7680-48ed-81a9-7faf871e80e7/page/page_12345"  <!-- GANTI DENGAN LINK BARU -->
+                width="100%"
+                height="500"
+                frameborder="0"
+                style="border:0; display:none;"
+                allowfullscreen
+                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Iframe 3: Tambahan lagi (contoh) – copy-paste struktur ini untuk iframe berikutnya -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow">
+            <div class="card-header py-3 bg-primary text-white">
+              <h6 class="m-0">Grafik Realisasi 3</h6>
+            </div>
+            <div class="card-body p-0">
+              <div id="looker-placeholder-3" style="height:500px; background:#f8f9fa; display:flex; align-items:center; justify-content:center;">
+                <div class="spinner-border text-primary me-3" role="status" style="width: 3rem; height: 3rem;"></div>
+                <div>
+                  <strong>Memuat Grafik...</strong><br>
+                  <small class="text-muted">Tunggu beberapa detik</small>
+                </div>
+              </div>
+
+              <iframe 
+                id="looker-iframe-3"
+                src="https://lookerstudio.google.com/embed/reporting/273d019c-7680-48ed-81a9-7faf871e80e7/page/page_12345"  <!-- GANTI SRC -->
+                width="100%"
+                height="500"
+                frameborder="0"
+                style="border:0; display:none;"
+                allowfullscreen
+                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-forms">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tambahkan iframe 4, 5, dst. dengan copy-paste struktur di atas -->
+      <!-- Contoh untuk iframe ke-4 -->
+      <!-- ... copy blok <div class="row mb-4"> di atas, ganti id, nomor, dan src ... -->
+
+    </div>
+  `;
+
+  contentDiv.innerHTML = html;
+
+  // Muat semua iframe setelah HTML dirender
+  const iframes = [
+    { id: 'looker-iframe-1', placeholder: 'looker-placeholder-1' },
+    { id: 'looker-iframe-2', placeholder: 'looker-placeholder-2' },
+    { id: 'looker-iframe-3', placeholder: 'looker-placeholder-3' },
+    // Tambahkan object untuk iframe berikutnya
+    // { id: 'looker-iframe-4', placeholder: 'looker-placeholder-4' },
+  ];
+
+  iframes.forEach((item, index) => {
+    const iframe = document.getElementById(item.id);
+    const placeholder = document.getElementById(item.placeholder);
+
+    if (iframe && placeholder) {
+      iframe.onload = () => {
+        placeholder.style.display = 'none';
+        iframe.style.display = 'block';
+        console.log(`Iframe ${index + 1} berhasil dimuat`);
+      };
+
+      iframe.onerror = () => {
+        placeholder.innerHTML = '<div class="alert alert-danger m-4 text-center">Gagal memuat. Cek link embed.</div>';
+        console.error(`Iframe ${index + 1} gagal`);
+      };
+
+      // Trigger load
+      iframe.src = iframe.src;
+    }
+  });
+}
+
+
+
+
+function loadforgotPassword(){
+      $('#forgotPasswordModal').modal('show');
+  document.getElementById("successAlertforgot").style.display = 'none';
+  document.getElementById("errorAlertforgot").style.display = 'none';
+}
+    $('#forgotBtn').on('click', function() {
+
+
+  let email = document.getElementById("emailforgot").value.trim();
+  console.log("dsd");
+  if (!email) {
+    console.log("errorAlertforgot");
+    showAlert("errorAlertforgot", "Please enter a valid email.");
+    return;
+  }
+
+  showAlert("successAlertforgot", "Processing... Please wait.");
+
+  google.script.run
+    .withSuccessHandler(function (response) {
+      if (response.success) {
+        
+        showAlert("successAlertforgot", "Password reset link has been sent to your email.");
+        setTimeout(() => {
+          let modal = document.getElementById("forgotPasswordModal");
+
+          // Hide the modal
+          modal.classList.remove("show");
+          modal.style.display = "none";
+          document.body.classList.remove("modal-open");
+
+          // Remove the backdrop manually
+          let backdrop = document.querySelector(".modal-backdrop");
+          if (backdrop) {
+            backdrop.remove();
+          }
+
+          // Reset the form fields
+          document.getElementById("forgotPasswordForm").reset();
+        }, 3000);
+      } else {
+        
+        showAlert("errorAlertforgot", response.message || "Email not found.");
+      }
+    })
+    .withFailureHandler(function (error) {
+      showAlert("errorAlertforgot", "Error: " + error.message);
+    })
+    .generateResetToken(email);
+});
+function showAlert(alertId, message) {
+  document.getElementById("successAlertforgot").style.display = 'none';
+  document.getElementById("errorAlertforgot").style.display = 'none';
+  let alertBox = document.getElementById(alertId);
+    alertBox.textContent = message;
+    alertBox.style.display = 'block';
+}
+
+function dashboarddisplay() {
+    const contentDiv = document.getElementById('mainContent');
+    let html = `
+
+        <div class="row">
+
+        <!-- Embed Google Sheet Chart -->
+
+              <div class="col-12">
+                <div class="card shadow">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Dashboard Sosial Ekonomi</h6>
+                  </div>
+                  <div class="card-body p-0">
+                    <!-- Ganti src dengan link embed chart kamu -->
+
+                    <iframe 
+                      src="https://lookerstudio.google.com/embed/reporting/273d019c-7680-48ed-81a9-7faf871e80e7/page/page_12345" 
+                      width="100%" 
+                      height="550" 
+                      frameborder="0" 
+                      style="border:0;" 
+                      allowfullscreen >
+                    </iframe>
+
+                  </div>
+                </div>
+              </div>
+        </div>
+    `;
+
+    contentDiv.innerHTML = html;
+
+
+    
+}
+
+function fetchDashboardData() {
+    google.script.run.withSuccessHandler(updateDashboard).getDashboardData();
+}
+
+function updateDashboard(data) {
+  data=JSON.parse(data);
+  const userJson = sessionStorage.getItem('currentUser');
+    
+    let currentUser = JSON.parse(userJson);
+    console.log(currentUser);
+    // Extract users and leave requests
+    const users = data.users || [];
+    const leaveRequests = data.leaveRequests || [];
+
+    // Calculate total employees
+    const totalEmployees = users.length;
+
+    // Count pending leave requests
+    const pendingLeaves = leaveRequests.filter(req => req.Status === "" || req.Status === "Pending").length;
+
+    // Count team members (excluding Super Admin)
+    let teamMembers =0;
+    //const teamMembers = users.filter(user => user.Role !== "Super Admin").length;
+    if (currentUser.role=="Super_Admin"){
+      teamMembers =totalEmployees;
+    }else{
+      teamMembers = users.filter(user => user.Role == currentUser.role).length;
+    }
+    
+
+    // Assume the logged-in user's ID (replace with actual method to get logged-in user ID)
+    const loggedInUserID = currentUser.id; // Example ID
+    const yourLeaves = leaveRequests.filter(req => req.EmployeeID === loggedInUserID).length;
+
+    // Update dashboard values
+    document.getElementById('totalEmployees').textContent = totalEmployees;
+    document.getElementById('pendingLeaves').textContent = pendingLeaves;
+    document.getElementById('teamMembers').textContent = teamMembers;
+    document.getElementById('yourLeaves').textContent = yourLeaves;
+    
+
+    // Update leave requests table
+    const tableBody = document.getElementById('leaveRequestsTableBody');
+    tableBody.innerHTML = leaveRequests.map(request => `
+        <tr>
+          <td>${request.EmployeeName || "N/A"}</td>
+          <td>${request.LeaveType || "N/A"}</td>
+          <td>${formatDateToYYYYMMDD(request.StartDate) || "N/A"}</td>
+          <td>${formatDateToYYYYMMDD(request.EndDate) || "N/A"}</td>
+          <td>${request.TotalDays || "N/A"}</td>
+          <td>${request.Status || "N/A"}</td>
+          <td>${formatDateToYYYYMMDD(request.RequestDate) || "N/A"}</td>
+        </tr>`).join('');
+}
+
+
+function loadUsers() {
+    const sessionToken = sessionStorage.getItem('sessionToken');
+    const permissions = JSON.parse(sessionStorage.getItem('permissions'));
+    const contentDiv = document.getElementById('mainContent');
+
+    let html = `
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">User Management</h4>
+                    <div class="page-breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" onclick="loadDashboard()">Dashboard</a></li>
+                            <li class="breadcrumb-item active">User Management</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header d-flex justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Employees</h6>
+                        <div id="addUserBtnContainer"></div>
+                    </div>
+                    <div class="card-body">
+                        <div id="userTableAlert" class="alert" style="display: none;"></div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="usersTable" width="100%" cellspacing="0">
+                                <thead></thead>
+                                <tbody><tr><td colspan="8" class="text-center">Loading data...</td></tr></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="userFormModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="userFormModalLabel">Add New Employee</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="userForm">
+                            <input type="hidden" id="userId">
+                            <input type="hidden" id="formMode" value="add">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name</label>
+                                    <input type="text" class="form-control" id="FirstName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" id="LastName" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="Email" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone</label>
+                                    <input type="tel" class="form-control" id="Phone">
+                                </div>
+                            </div>
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="JoinDate" class="form-label">Join Date</label>
+                                    <input type="date" class="form-control" id="JoinDate" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="VisaExpiry" class="form-label">Visa Expiry</label>
+                                    <input type="date" class="form-control" id="VisaExpiry">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="InsuranceExpiry" class="form-label">Insurance Expiry</label>
+                                    <input type="date" class="form-control" id="InsuranceExpiry" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="Address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="Address">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="role" class="form-label">Role</label>
+                                    <select class="form-select" id="Role" required></select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <select class="form-select" id="Department"></select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="reportsTo" class="form-label">Reports To</label>
+                                    <select class="form-select" id="ReportsTo"></select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="status" class="form-label">Status</label>
+                                    <select class="form-select" id="Status">
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="saveUserBtn">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    contentDiv.innerHTML = html;
+
+    google.script.run.withSuccessHandler(function(result) {
+        console.log(result); // Check the exact structure
+        let rolesOptions = '<option value="">Select a role</option>';
+        result.forEach(role => { // Fix here: Use result instead of result.roles
+            rolesOptions += `<option value="${role.RoleID}">${role.RoleName}</option>`;
+        });
+        document.getElementById('Role').innerHTML = rolesOptions;
+    }).getRoles();
+
+
+
+google.script.run.withSuccessHandler(function(result) {
+    console.log(result); // Check structure
+    let departmentsOptions = '<option value="">Select a department</option>';
+    result.forEach(department => { // Fix here
+        departmentsOptions += `<option value="${department.DepartmentID}">${department.DepartmentName}</option>`;
+    });
+    document.getElementById('Department').innerHTML = departmentsOptions;
+}).getDepartments();
+
+
+
+google.script.run.withSuccessHandler(function(result) {
+  result=JSON.parse(result);
+    console.log(result); // Inspect the structure
+    let managersOptions = '<option value="">Select a manager</option>';
+    
+    if (Array.isArray(result)) { // Ensure result is an array
+        result.forEach(manager => {
+            managersOptions += `<option value="${manager.UserID}">${manager.FirstName} ${manager.LastName}</option>`;
+        });
+    }
+    
+    document.getElementById('ReportsTo').innerHTML = managersOptions;
+
+
+    $('#usersTable').DataTable({
+        destroy: true,
+        responsive: true,
+        data: result,
+        columns: [
+            { data: 'Email', title: 'Email' },
+            { data: 'FirstName', title: 'First Name' },
+            { data: 'LastName', title: 'Last Name' },
+            {data:null,
+            title:'Role',
+            render:function(data,type,row){
+              let role=row.Role.replace(/_/g, ' '); 
+              return role;
+            }
+            },
+            {data:null,
+            title:'ReportTo',
+            render:function(data,type,row){
+              let reportto=row.ReportsTo.replace(/_\d{4}$/, '').replace(/_/g, ' '); 
+              return reportto;
+            }
+            },
+            { data: 'Department', title: 'Department' },
+            {
+                data: null,
+                title: 'Actions',
+                orderable: false,
+                render: function(data, type, row) {
+                    let actionButtons = '';
+                    // Check user permissions and add respective buttons
+                    if (permissions.permissions.users.canView) {
+                        actionButtons += `<button class="btn btn-info btn-sm" onclick="showUserForm('view', '${row.UserID}')">
+                            <i class="fas fa-eye"></i>
+                        </button> `;
+                    }
+
+                    if (permissions.permissions.users.canEdit) {
+                        actionButtons += `<button class="btn btn-warning btn-sm" onclick="showUserForm('edit','${row.UserID}')">
+                            <i class="fas fa-edit"></i>
+                        </button> `;
+                    }
+
+                    if (permissions.permissions.users.canDelete) {
+                        actionButtons += `<button class="btn btn-danger btn-sm" onclick="showUserForm('delete',${row.UserID}')">
+                            <i class="fas fa-trash"></i>
+                        </button>`;
+                    }
+
+                    return actionButtons;
+                }
+            }
+        ]
+    });
+          // Conditionally show "Add Employee" button
+      if (permissions.permissions.users.canAdd) {
+          $('#addUserBtnContainer').html(`
+              <button type="button" class="btn btn-primary btn-sm" id="addUserBtn">
+                  <i class="fas fa-plus"></i> Add Employee
+              </button>
+          `);
+          // Add button click handler
+          $('#addUserBtn').on('click', function() {
+              showUserForm('add');
+          });
+            $('#saveUserBtn').on('click', function() {
+              saveUser();
+            });
+      }
+  }).getAllUsers(sessionToken);
+}
+
+    function showUserForm(mode, userId) {
+      // Set modal title
+      if (mode === 'add') {
+        $('#userFormModalLabel').text('Add New Employee');
+      } else if (mode === 'edit') {
+        $('#userFormModalLabel').text('Edit Employee');
+      } else if (mode === 'view') {
+        $('#userFormModalLabel').text('View Employee');
+      }
+      
+      // Clear previous form data and errors
+      $('#userForm')[0].reset();
+      $('#userFormErrorAlert').hide();
+      $('#userFormSuccessAlert').hide();
+      
+      // Set form mode and user ID
+      $('#formMode').val(mode);
+      $('#userId').val(userId || '');
+      
+      
+      // Disable fields in view mode
+      const disableFields = mode === 'view';
+      $('#userForm input, #userForm select').prop('disabled', disableFields);
+      
+      // Hide save button in view mode
+      $('#saveUserBtn').toggle(mode !== 'view');
+      
+      // If edit or view mode, load user data
+      if (mode === 'edit' || mode === 'view') {
+        loadUserData(userId);
+      }
+      
+      // Show modal
+      $('#userFormModal').modal('show');
+    }
+
+function loadUserData(userId) {
+
+
+  // Show loading indicator
+  $('#userFormErrorAlert')
+    .removeClass()
+    .addClass('alert alert-info')
+    .text('Loading user data...')
+    .show();
+
+  google.script.run
+    .withSuccessHandler(function (user) {
+      console.log('Fetched User:', user);
+      user=JSON.parse(user);
+      if (!user) {
+        $('#userFormErrorAlert')
+          .removeClass()
+          .addClass('alert alert-danger')
+          .text('User not found')
+          .show();
+        return;
+      }
+   
+      // Fill form with user data
+      $('#FirstName').val(user.FirstName || '');
+      $('#LastName').val(user.LastName || '');
+      $('#Email').val(user.Email || '');
+      $('#Role').val(user.Role || '');
+      $('#Department').val(user.Department || '');
+      $('#ReportsTo').val(user.ReportsTo || '');
+      $('#Status').val(user.Status || '');
+      $('#Phone').val(user.Phone || '');
+      $('#Address').val(user.Address || '');
+      $('#VisaExpiry').val(formatDateToYYYYMMDD(user.VisaExpiry) || '');
+      $('#InsuranceExpiry').val(formatDateToYYYYMMDD(user.InsuranceExpiry) || '');
+      $('#JoinDate').val(formatDateToYYYYMMDD(user.JoinDate) || '');
+
+      // Hide loading message
+      $('#userFormErrorAlert').hide();
+    })
+    .withFailureHandler(function (error) {
+      $('#userFormErrorAlert')
+        .removeClass()
+        .addClass('alert alert-danger')
+        .text('Error loading user data: ' + error)
+        .show();
+      console.error('Error loading user data:', error);
+    })
+    .getUserById(userId);
+}
+
+
+/**
+ * Saves user data (create or update)
+ */
+function saveUser() {
+  // Get form data
+  const mode = $('#formMode').val();
+  const userId = $('#userId').val();
+  
+  const userData = {
+    FirstName: $('#FirstName').val(),
+    LastName: $('#LastName').val(),
+    Email: $('#Email').val(),
+    Role: $('#Role').val(),
+    Department: $('#Department').val(),
+    ReportsTo: $('#ReportsTo').val(),
+    Status: $('#Status').val(),
+    Address: $('#Address').val(),
+    VisaExpiry: $('#VisaExpiry').val(),
+    InsuranceExpiry: $('#InsuranceExpiry').val(),
+    JoinDate: $('#JoinDate').val(),
+    Phone: $('#Phone').val()
+  };
+
+  // Validate required fields
+  if (!userData.FirstName || !userData.LastName || !userData.Email || !userData.Role) {
+    $('#userFormErrorAlert').removeClass().addClass('alert alert-danger').text('Please fill all required fields').show();
+    return;
+  }
+  
+
+  if (!isValidEmail(userData.Email)) {
+    $('#userFormErrorAlert').removeClass().addClass('alert alert-danger').text('Please enter a valid email address').show();
+    return;
+  }
+    
+  // Show loading state
+  const saveBtn = $('#saveUserBtn');
+  const originalBtnText = saveBtn.html();
+  saveBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
+  saveBtn.prop('disabled', true);
+  
+  // Clear previous alerts
+  $('#userFormErrorAlert').hide();
+  $('#userFormSuccessAlert').hide();
+  
+  // Get session token
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  
+  // Call appropriate server function based on mode
+  if (mode === 'add') {
+    // Create new user
+    console.log("add");
+    console.log(userData);
+    google.script.run
+      .withSuccessHandler(handleSaveUserResponse)
+      .withFailureHandler(function(error) {
+        handleSaveUserError(error, saveBtn, originalBtnText);
+      })
+      .createUser(sessionToken, userData);
+  } else if (mode === 'edit') {
+    console.log(userData);
+    // Update existing user
+    userData.id = userId;
+    google.script.run
+      .withSuccessHandler(handleSaveUserResponse)
+      .withFailureHandler(function(error) {
+        handleSaveUserError(error, saveBtn, originalBtnText);
+      })
+      .updateUser(sessionToken,userId, userData);
+  }
+  
+  /**
+   * Handles save user response
+   * @param {Object} result - Server response
+   */
+  function handleSaveUserResponse(result) {
+    console.log(result);
+    // Reset button state
+    saveBtn.html(originalBtnText);
+    saveBtn.prop('disabled', false);
+    
+    if (result.success) {
+      // Show success message
+      $('#userFormSuccessAlert').text(result.message).show();
+      
+      // Reload users table
+      loadUsers();
+      
+      // Close modal after delay
+      setTimeout(function() {
+        $('#userFormModal').modal('hide');
+        $('.modal-backdrop').remove(); // Remove the dimmed background
+        $('body').removeClass('modal-open'); // Ensure scrolling is restored
+      }, 1500);
+    } else {
+      // Show error message
+      $('#userFormErrorAlert').removeClass().addClass('alert alert-danger').text(result.message).show();
+    }
+  }
+  
+
+
+
+
+  /**
+   * Handles save user error
+   * @param {string} error - Error message
+   * @param {Object} button - Save button jQuery object
+   * @param {string} originalText - Original button text
+   */
+  function handleSaveUserError(error, button, originalText) {
+    // Reset button state
+    button.html(originalText);
+    button.prop('disabled', false);
+    
+    // Show error message
+    $('#userFormErrorAlert').removeClass().addClass('alert alert-danger').text('Error saving user: ' + error).show();
+    console.error('Error saving user:', error);
+  }
+}
+function formatDateToYYYYMMDD(dateString) {
+    if (!dateString) return ''; // Handle empty/null values
+
+    let date = new Date(dateString);
+    if (isNaN(date.getTime())) return ''; // Handle invalid dates
+
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
+    let day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+
+    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+}
+
+  // Validate email format
+  function isValidEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+
+
+  /**
+   * Leaves
+   */
+function loadLeave(){
+      const sessionToken = sessionStorage.getItem('sessionToken');
+    const permissions = JSON.parse(sessionStorage.getItem('permissions'));
+    const contentDiv = document.getElementById('mainContent');
+
+let html=` <div class="row">
+          <!-- My Leave Requests -->
+          <div class="col-lg-12">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">My Leave Requests</h6>
+                <div id="applyLeaveBtnContainer">
+                  <button type="button" class="btn btn-primary btn-sm" id="applyLeaveBtn">
+                    <i class="fas fa-plus"></i> Apply for Leave
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="myLeaveTableAlert" class="alert" style="display: none;"></div>
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="myLeaveTable" width="100%" cellspacing="0">
+                    <thead>
+                    </thead>
+                    <tbody id="myLeaveTableBody">
+                      <tr>
+                        <td colspan="9" class="text-center">Loading data...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Leave Requests for Approval (Only visible to managers) -->
+          <div class="col-lg-12" id="approvalSectionContainer" style="display: none;">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Leave Requests for Approval</h6>
+              </div>
+              <div class="card-body">
+                <div id="approvalTableAlert" class="alert" style="display: none;"></div>
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="approvalLeaveTable" width="100%" cellspacing="0">
+                    <thead>
+                    </thead>
+                    <tbody id="approvalLeaveTableBody">
+                      <tr>
+                        <td colspan="9" class="text-center">Loading data...</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Apply Leave Modal -->
+  <div class="modal fade" id="leaveFormModal" tabindex="-1" aria-labelledby="leaveFormModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="leaveFormModalLabel">Apply for Leave</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="leaveFormErrorAlert" style="display: none;"></div>
+          <div class="alert alert-success" id="leaveFormSuccessAlert" style="display: none;"></div>
+          
+          <form id="leaveForm">
+            <div class="mb-3">
+              <label for="leaveType" class="form-label">Leave Type</label>
+              <select class="form-select" id="leaveType" required>
+                <option value="">Select leave type</option>
+                <option value="Annual Leave">Annual Leave</option>
+                <option value="Sick Leave">Sick Leave</option>
+                <option value="Personal Leave">Personal Leave</option>
+                <option value="Bereavement Leave">Bereavement Leave</option>
+                <option value="Maternity/Paternity Leave">Maternity/Paternity Leave</option>
+                <option value="Unpaid Leave">Unpaid Leave</option>
+              </select>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="startDate" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="endDate" required>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="leaveReason" class="form-label">Reason</label>
+              <textarea class="form-control" id="leaveReason" rows="3" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="submitLeaveBtn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Leave Approval Modal -->
+  <div class="modal fade" id="leaveApprovalModal" tabindex="-1" aria-labelledby="leaveApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="leaveApprovalModalLabel">Process Leave Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="approvalErrorAlert" style="display: none;"></div>
+          <div class="alert alert-success" id="approvalSuccessAlert" style="display: none;"></div>
+          
+          <div id="leaveDetails" class="mb-3">
+            <p><strong>Employee:</strong> <span id="approvalEmployeeName"></span></p>
+            <p><strong>Leave Type:</strong> <span id="approvalLeaveType"></span></p>
+            <p><strong>Duration:</strong> <span id="approvalStartDate"></span> to <span id="approvalEndDate"></span> (<span id="approvalDays"></span> days)</p>
+            <p><strong>Reason:</strong> <span id="approvalReason"></span></p>
+          </div>
+          
+          <form id="approvalForm">
+            <input type="hidden" id="leaveId" value="">
+            
+            <div class="mb-3">
+              <label for="approvalComments" class="form-label">Comments</label>
+              <textarea class="form-control" id="approvalComments" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="rejectLeaveBtn">Reject</button>
+          <button type="button" class="btn btn-success" id="approveLeaveBtn">Approve</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  `;
+
+     contentDiv.innerHTML = html;
+
+      // Initialize DataTables
+  // myLeaveTable = $('#myLeaveTable').DataTable({
+  //   pageLength: 10,
+  //   lengthMenu: [10, 25, 50, 100],
+  //   order: [[2, 'desc']], // Sort by start date (newest first)
+  //   language: {
+  //     emptyTable: "No leave requests found"
+  //   }
+  // });
+  
+  // approvalLeaveTable = $('#approvalLeaveTable').DataTable({
+  //   pageLength: 10,
+  //   lengthMenu: [10, 25, 50, 100],
+  //   order: [[7, 'desc']], // Sort by request date (newest first)
+  //   columnDefs: [
+  //     { targets: 0, visible: false }, // Hide Leave ID column
+  //     { targets: 8, orderable: false } // Actions column not sortable
+  //   ],
+  //   language: {
+  //     emptyTable: "No leave requests pending approval"
+  //   }
+  // });
+  
+  // Apply leave button handler
+  $('#applyLeaveBtn').on('click', function() {
+    showLeaveForm();
+  });
+  
+  /**
+ * Shows the leave request form
+ */
+function showLeaveForm() {
+  // Reset form
+  $('#leaveForm')[0].reset();
+  
+  // Clear alerts
+  $('#leaveFormErrorAlert').hide();
+  $('#leaveFormSuccessAlert').hide();
+  
+  // Set min date for datepickers to today
+  const today = new Date().toISOString().split('T')[0];
+  $('#startDate').attr('min', today);
+  $('#endDate').attr('min', today);
+  
+  // Show modal
+  $('#leaveFormModal').modal('show');
+}
+
+
+  // Submit leave button handler
+  $('#submitLeaveBtn').on('click', function() {
+    submitLeaveRequest();
+  });
+  
+  // Approve leave button handler
+  $('#approveLeaveBtn').on('click', function() {
+    processLeaveRequest('approve');
+  });
+  
+  // Reject leave button handler
+  $('#rejectLeaveBtn').on('click', function() {
+    processLeaveRequest('reject');
+  });
+  
+  // Load leave data
+  loadLeaveData();
+}
+  function loadLeaveData() {
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  console.log(sessionToken);
+  console.log("SSSS");
+  // Load my leave requests
+  google.script.run
+    .withSuccessHandler(function(result) {
+      result=JSON.parse(result);
+      console.log(result);
+      // Clear table
+    $('#myLeaveTable').DataTable({
+        destroy: true,
+        responsive: true,
+        data: result.leaveRequests,
+        columns: [
+            { data: 'LeaveID', title: 'LeaveID' },
+            { data: 'EmployeeName', title: 'EmployeeName' },
+            { data: 'LeaveType', title: 'LeaveType' },
+              ]
+    });
+
+      if (!result.success) {
+        // Show error
+        $('#myLeaveTableAlert').removeClass().addClass('alert alert-danger').text(result.message).show();
+        return;
+      }
+    })
+    .withFailureHandler(function(error) {
+      myLeaveTable.clear().draw();
+      $('#myLeaveTableAlert').removeClass().addClass('alert alert-danger').text('Error loading leave requests: ' + error).show();
+      console.error('Error loading leave requests:', error);
+    })
+    .getMyLeaveRequests(sessionToken);
+  
+  // Check if user can approve leaves
+  // google.script.run
+  //   .withSuccessHandler(function(result) {
+  //     if (result.canApprove) {
+  //       // Show approval section
+  //       $('#approvalSectionContainer').show();
+        
+  //       // Load pending approvals
+  //       loadPendingApprovals();
+  //     } else {
+  //       // Hide approval section
+  //       $('#approvalSectionContainer').hide();
+  //     }
+  //   })
+  //   .withFailureHandler(function(error) {
+  //     console.error('Error checking approval permissions:', error);
+  //     // Hide approval section on error
+  //     $('#approvalSectionContainer').hide();
+  //   })
+  //   .canApproveLeaves(sessionToken);
+
+  loadPendingApprovals();
+}
+
+/**
+ * Loads pending leave approvals
+ */
+function loadPendingApprovals() {
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  console.log(sessionToken);
+  console.log("Loading pending approvals...");
+
+  google.script.run
+    .withSuccessHandler(function(result) {
+      result = JSON.parse(result);
+      console.log(result);
+
+      // Check if request was successful
+      if (!result.success) {
+        $('#approvalSectionContainer').hide();
+        return;
+      } else {
+        $('#approvalSectionContainer').show();
+      }
+
+      // Initialize DataTable with click event for opening the modal
+      const table = $('#approvalLeaveTable').DataTable({
+        destroy: true,
+        responsive: true,
+        data: result.leaveRequests || [],
+        columns: [
+          { data: 'LeaveID', title: 'Leave ID' },
+          { data: 'EmployeeName', title: 'Employee Name' },
+          { data: 'LeaveType', title: 'Leave Type' },
+          {
+            data: 'StartDate',
+            title: 'Start Date',
+            render: function (data, type, row) {
+              return formatDateToYYYYMMDD(data);
+            }
+          },
+          {
+            data: 'EndDate',
+            title: 'End Date',
+            render: function (data, type, row) {
+              return formatDateToYYYYMMDD(data);
+            }
+          },
+          { data: 'TotalDays', title: 'Total Days' },
+          { data: 'Reason', title: 'Reason' },
+          { data: 'Status', title: 'Status' },
+          { data: 'ApproverName', title: 'Approver' },
+          {
+            data: null,
+            title: 'Actions',
+            render: function () {
+              return '<button class="btn btn-primary btn-sm open-approval-modal">Review</button>';
+            }
+          }
+        ]
+      });
+
+      // Handle row click to open modal
+      $('#approvalLeaveTable tbody').on('click', 'button.open-approval-modal', function () {
+        const rowData = table.row($(this).parents('tr')).data();
+        
+        if (rowData) {
+          $('#approvalEmployeeName').text(rowData.EmployeeName);
+          $('#approvalLeaveType').text(rowData.LeaveType);
+          $('#approvalStartDate').text(formatDateToYYYYMMDD(rowData.StartDate));
+          $('#approvalEndDate').text(formatDateToYYYYMMDD(rowData.EndDate));
+          $('#approvalDays').text(rowData.TotalDays);
+          $('#approvalReason').text(rowData.Reason);
+          $('#leaveId').val(rowData.LeaveID);
+          $('#approvalErrorAlert').hide();
+          $('#approvalSuccessAlert').hide();
+          $('#approvalComments').val('');
+          
+          // Show modal
+          $('#leaveApprovalModal').modal('show');
+        }
+      });
+    })
+    .withFailureHandler(function(error) {
+      $('#approvalLeaveTable').DataTable().clear().draw();
+      $('#approvalTableAlert').removeClass().addClass('alert alert-danger').text('Error loading pending approvals: ' + error).show();
+      console.error('Error loading pending approvals:', error);
+    })
+    .getPendingApprovals1(sessionToken);
+}
+
+/**
+ * Submits a leave request
+ */
+function submitLeaveRequest() {
+  // Get form data
+  const leaveType = $('#leaveType').val();
+  const startDate = $('#startDate').val();
+  const endDate = $('#endDate').val();
+  const reason = $('#leaveReason').val();
+  
+  // Validate required fields
+  if (!leaveType || !startDate || !endDate || !reason) {
+    $('#leaveFormErrorAlert').text('Please fill all required fields').show();
+    return;
+  }
+  
+  // Validate date range
+  if (startDate > endDate) {
+    $('#leaveFormErrorAlert').text('End date cannot be before start date').show();
+    return;
+  }
+  
+  // Show loading state
+  const submitBtn = $('#submitLeaveBtn');
+  const originalBtnText = submitBtn.html();
+  submitBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Submitting...');
+  submitBtn.prop('disabled', true);
+  
+  // Clear alerts
+  $('#leaveFormErrorAlert').hide();
+  $('#leaveFormSuccessAlert').hide();
+  
+  // Get session token
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  
+  // Create leave data object
+  const leaveData = {
+    leaveType: leaveType,
+    startDate: startDate,
+    endDate: endDate,
+    reason: reason
+  };
+  
+  // Call server-side function
+  google.script.run
+    .withSuccessHandler(function(result) {
+      // Reset button state
+      console.log(result);
+      submitBtn.html(originalBtnText);
+      submitBtn.prop('disabled', false);
+      
+      if (result.success) {
+        // Show success message
+        $('#leaveFormSuccessAlert').text(result.message).show();
+        
+        // Reset form
+        $('#leaveForm')[0].reset();
+        
+        // Reload leave data
+        loadLeaveData();
+        
+        // Close modal after delay
+        setTimeout(function() {
+          $('#leaveFormModal').modal('hide');
+        }, 1500);
+      } else {
+        // Show error message
+        $('#leaveFormErrorAlert').text(result.message).show();
+      }
+    })
+    .withFailureHandler(function(error) {
+      // Reset button state
+      submitBtn.html(originalBtnText);
+      submitBtn.prop('disabled', false);
+      
+      // Show error message
+      $('#leaveFormErrorAlert').text('Error submitting leave request: ' + error).show();
+      console.error('Error submitting leave request:', error);
+    })
+    .createLeaveRequest(sessionToken, leaveData);
+}
+
+/**
+ * Processes a leave request (approve or reject)
+ * @param {string} action - Action to take (approve or reject)
+ */
+function processLeaveRequest(action) {
+  // Get data
+  const leaveId = $('#leaveId').val();
+  const comments = $('#approvalComments').val();
+  
+  // Validate comments
+  if (!comments) {
+    $('#approvalErrorAlert').text('Please provide comments for your decision').show();
+    return;
+  }
+  
+  // Show loading state
+  const actionBtn = action === 'approve' ? $('#approveLeaveBtn') : $('#rejectLeaveBtn');
+  const originalBtnText = actionBtn.html();
+  actionBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+  $('#approveLeaveBtn, #rejectLeaveBtn').prop('disabled', true);
+  
+  // Clear alerts
+  $('#approvalErrorAlert').hide();
+  $('#approvalSuccessAlert').hide();
+  
+  // Get session token
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  
+  // Call server-side function
+  google.script.run
+    .withSuccessHandler(function(result) {
+      // Reset button state
+      actionBtn.html(originalBtnText);
+      $('#approveLeaveBtn, #rejectLeaveBtn').prop('disabled', false);
+      
+      if (result.success) {
+        // Show success message
+        $('#approvalSuccessAlert').text(result.message).show();
+        
+        // Reload leave data
+        loadLeaveData();
+        
+        // Close modal after delay
+        setTimeout(function() {
+          $('#approvalErrorAlert').hide();
+          $('#approvalSuccessAlert').hide();
+          $('#leaveApprovalModal').modal('hide');
+        }, 1500);
+      } else {
+        // Show error message
+        $('#approvalErrorAlert').text(result.message).show();
+      }
+    })
+    .withFailureHandler(function(error) {
+      // Reset button state
+      actionBtn.html(originalBtnText);
+      $('#approveLeaveBtn, #rejectLeaveBtn').prop('disabled', false);
+      
+      // Show error message
+      $('#approvalErrorAlert').text('Error processing leave request: ' + error).show();
+      console.error('Error processing leave request:', error);
+    })
+    .processLeaveRequest(sessionToken, leaveId, action, comments);
+}
+
+
+
+function loadpermission(){
+  const contentDiv = document.getElementById('mainContent');
+  let html=`
+  <div class="container mt-4">
+  <h2>Role Permissions Settings</h2>
+
+  <!-- Role Selection Dropdown -->
+  <div class="mb-3">
+    <label for="roleSelect" class="form-label">Select Role</label>
+    <select id="roleSelect" class="form-select">
+      <option value="">-- Select Role --</option>
+    </select>
+  </div>
+
+  <!-- Permissions Table -->
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Menu</th>
+        <th>Can View</th>
+        <th>Can Add</th>
+        <th>Can Edit</th>
+        <th>Can Delete</th>
+      </tr>
+    </thead>
+    <tbody id="permissionsTable"></tbody>
+  </table>
+
+  <button class="btn btn-success" id="savePermissions">Save Permissions</button>
+</div>`;
+contentDiv.innerHTML = html;
+
+    document.getElementById("roleSelect").addEventListener("change", function () {
+      let roleID = this.value;
+      if (roleID) {
+        loadPermissions(roleID);
+      } else {
+        document.getElementById("permissionsTable").innerHTML = "";
+      }
+    });
+
+    document.getElementById("savePermissions").addEventListener("click", function () {
+      savePermissions();
+    });
+  loadRoles();
+
+}
+
+  function loadRoles() {
+    google.script.run.withSuccessHandler(function (roles) {
+      let roleSelect = document.getElementById("roleSelect");
+      roles.forEach(role => {
+        let option = document.createElement("option");
+        option.value = role.RoleID;
+        option.textContent = role.RoleName;
+        roleSelect.appendChild(option);
+      });
+    }).getRoles();
+  }
+
+  // Load permissions for selected role
+  function loadPermissions(roleID) {
+    google.script.run.withSuccessHandler(function (permissions) {
+      console.log(permissions);
+      let tableBody = document.getElementById("permissionsTable");
+      tableBody.innerHTML = ""; // Clear previous data
+
+      permissions.forEach(permission => {
+        let row = `<tr>
+          <td>${permission.MenuID}</td>
+          <td><input type="checkbox" ${permission.CanView ? "checked" : ""} data-menu="${permission.MenuID}" data-permission="CanView"></td>
+          <td><input type="checkbox" ${permission.CanAdd ? "checked" : ""} data-menu="${permission.MenuID}" data-permission="CanAdd"></td>
+          <td><input type="checkbox" ${permission.CanEdit ? "checked" : ""} data-menu="${permission.MenuID}" data-permission="CanEdit"></td>
+          <td><input type="checkbox" ${permission.CanDelete ? "checked" : ""} data-menu="${permission.MenuID}" data-permission="CanDelete"></td>
+        </tr>`;
+        tableBody.innerHTML += row;
+      });
+    }).getPermissionsByRole(roleID);
+  }
+
+  // Save updated permissions
+  function savePermissions() {
+    let roleID = document.getElementById("roleSelect").value;
+    if (!roleID) {
+      showToast("Please select a role first: " + "Please select a role first", "error");
+ 
+      return;
+    }
+
+    let permissions = [];
+    document.querySelectorAll("#permissionsTable input[type='checkbox']").forEach(input => {
+      let menuID = input.getAttribute("data-menu");
+      let permissionType = input.getAttribute("data-permission");
+      let isChecked = input.checked;
+
+      let permission = permissions.find(p => p.MenuID === menuID);
+      if (!permission) {
+        permission = { MenuID: menuID, RoleID: roleID };
+        permissions.push(permission);
+      }
+      permission[permissionType] = isChecked;
+    });
+
+    google.script.run.withSuccessHandler(function (response) {
+    //alert("Permissions updated successfully!");
+    showToast("Permissionsupdated successfully!", "success");
+
+    }).updatePermissions(permissions);
+  }
+
+
+  function loadProfile(){
+
+    let html=`<div class="row">
+          <div class="col-xl-4">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Profile Information</h6>
+              </div>
+              <div class="card-body">
+                <div class="text-center mb-4">
+                  <div class="profile-avatar position-relative d-inline-block">
+                    <img id="profileImagePreview" src="https://drive.google.com/thumbnail?id=1Zu2Vsuzuz_xGfImvysNVI01DzpIvR9tD" alt="Profile" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; cursor: pointer;" title="Click to change image">
+                    <input type="file" id="profileImageInput" accept="image/*" style="display: none;">
+                  </div>
+                  <h4 id="profileFullName" class="mt-3">Loading...</h4>
+                  <p id="profileRole" class="text-muted">Loading...</p>
+                </div>
+
+                
+                <div class="profile-info">
+                  <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <span class="text-muted">Email</span>
+                    <span id="profileEmail" class="fw-bold">Loading...</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <span class="text-muted">Department</span>
+                    <span id="profileDepartment" class="fw-bold">Loading...</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <span class="text-muted">Phone</span>
+                    <span id="profilePhone" class="fw-bold">Loading...</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <span class="text-muted">Address</span>
+                    <span id="profileAddress" class="fw-bold">Loading...</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+                    <span class="text-muted">Join Date</span>
+                    <span id="profileJoinDate" class="fw-bold">Loading...</span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center py-2">
+                    <span class="text-muted">Reports To</span>
+                    <span id="profileReportsTo" class="fw-bold">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-xl-8">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Edit Profile</h6>
+              </div>
+              <div class="card-body">
+                <div class="alert alert-danger" id="profileErrorAlert" style="display: none;"></div>
+                <div class="alert alert-success" id="profileSuccessAlert" style="display: none;"></div>
+                
+                <form id="profileForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="profileFirstName" class="form-label">First Name</label>
+                      <input type="text" class="form-control" id="profileFirstName" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="profileLastName" class="form-label">Last Name</label>
+                      <input type="text" class="form-control" id="profileLastName" disabled>
+                    </div>
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="profileEmailEdit" class="form-label">Email</label>
+                      <input type="email" class="form-control" id="profileEmailEdit" disabled>
+                      <div class="form-text">Email cannot be changed</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="profilePhoneEdit" class="form-label">Phone</label>
+                      <input type="tel" class="form-control" id="profilePhoneEdit">
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label for="profileAddressEdit" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="profileAddressEdit">
+                  </div>
+                  
+                  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn btn-primary" id="saveProfileBtn">
+                      <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        const contentDiv = document.getElementById('mainContent');
+        contentDiv.innerHTML = html;
+
+  // Save profile button click handler
+  $('#saveProfileBtn').on('click', function() {
+    saveProfile();
+  });
+  
+  // Change password button click handler (profile page version)
+  $('#changePasswordProfileBtn').on('click', function() {
+    changePasswordProfile();
+  });
+  loadProfileData();
+  }
+
+/**
+ * Loads profile data from the server
+ */
+function loadProfileData() {
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  
+  // Show loading indicators
+  $('#profileFullName, #profileRole, #profileEmail, #profileDepartment, #profilePhone, #profileAddress, #profileJoinDate, #profileReportsTo')
+    .html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+  
+  google.script.run
+    .withSuccessHandler(function(result) {
+      console.log(result);
+      result=JSON.parse(result);
+      if (!result.valid || !result.user) {
+        // Show error
+        showToast('Error loading profile: ' + (result.message || 'Invalid response'), 'error');
+        return;
+      }
+      const user = result.user;
+      // Display user info
+      $('#profileFullName').text(`${user.FirstName} ${user.LastName}`);
+      $('#profileRole').text(user.Role.replace(/_/g, ' '));
+      $('#profileEmail').text(user.Email);
+      $('#profileDepartment').text(user.Department || 'Not specified');
+      $('#profilePhone').text(user.Phone || 'Not specified');
+      $('#profileAddress').text(user.Address || 'Not specified');
+      $('#profileJoinDate').text(formatDateToYYYYMMDD(user.JoinDate));
+      $('#profileReportsTo').text(user.ReportsTo.replace(/_\d{4}$/, '').replace(/_/g, ' ') || 'None');
+      
+      // Fill edit form
+      $('#profileFirstName').val(user.FirstName);
+      $('#profileLastName').val(user.LastName);
+      $('#profileEmailEdit').val(user.Email);
+      $('#profilePhoneEdit').val(user.Phone);
+      $('#profileAddressEdit').val(user.Address);
+      $('#profileImagePreview').attr('src', user.ProfileImage || 'https://drive.google.com/thumbnail?id=1Zu2Vsuzuz_xGfImvysNVI01DzpIvR9tD');
+
+
+    })
+    .withFailureHandler(function(error) {
+      showToast('Error loading profile: ' + error, 'error');
+      console.error('Error loading profile:', error);
+    })
+    .getCurrentUser(sessionToken);
+
+
+    // Trigger file input when image is clicked
+    $('#profileImagePreview').on('click', function () {
+      $('#profileImageInput').click();
+    });
+ 
+
+    // Handle file change
+$('#profileImageInput').on('change', function () {
+  const file = this.files[0];
+  if (file) {
+    resizeAndUploadImage(file); // 👈 use this instead of original
+  }
+});
+
+}
+
+function resizeAndUploadImage(file, maxWidth = 300, maxHeight = 300) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      // Create a canvas to resize the image
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+
+      // Resize maintaining aspect ratio
+      if (width > maxWidth || height > maxHeight) {
+        if (width > height) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        } else {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const resizedBase64 = canvas.toDataURL("image/jpeg", 0.7); // 70% quality
+      const base64Data = resizedBase64.split(",")[1];
+
+      const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
+
+      google.script.run
+        .withSuccessHandler(function (result) {
+          if (result.success) {
+            showToast("Profile image updated successfully!", "success");
+            currentUser.ProfileImage = result.imageUrl;
+            sessionStorage.setItem("currentUser", JSON.stringify(currentUser));
+            $('#profileImagePreview').attr('src', result.imageUrl); // Update preview
+          } else {
+            showToast("Failed to upload image: " + result.message, "error");
+          }
+        })
+        .withFailureHandler(function (error) {
+          console.error("Upload failed:", error);
+          showToast("Error uploading image: " + error.message, "error");
+        })
+        .saveProfileImageToDrive(base64Data, file.name, currentUser.email);
+    };
+
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+
+function uploadProfileImageToDrive(file) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const base64Data = e.target.result.split(',')[1]; // remove data:image/...;base64
+    let currentUser= JSON.parse(sessionStorage.getItem('currentUser'));
+
+    google.script.run
+      .withSuccessHandler(function (result) {
+        if (result.success) {
+          showToast("Profile image updated successfully!", "success");
+
+          // Optional: Save image link in session
+          let user = JSON.parse(sessionStorage.getItem("currentUser"));
+          user.ProfileImage = result.imageUrl;
+          sessionStorage.setItem("currentUser", JSON.stringify(user));
+        } else {
+          showToast("Failed to upload image: " + result.message, "error");
+        }
+      })
+      .withFailureHandler(function (error) {
+        console.error("Upload failed:", error);
+        showToast("Error uploading image: " + error.message, "error");
+      })
+      .saveProfileImageToDrive(base64Data, file.name, currentUser.email);
+  };
+  reader.readAsDataURL(file);
+}
+
+function showToast(message, type = "info") {
+  const toast = $('<div class="toast align-items-center text-bg-' + type + ' border-0" role="alert"><div class="d-flex"><div class="toast-body">' + message + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div>');
+  $('#toast-container').append(toast);
+  toast.toast({ delay: 4000 });
+  toast.toast('show');
+}
+
+
+/**
+ * Saves profile data
+ */
+function saveProfile() {
+  // Get form data
+  const profileData = {
+    firstName: $('#profileFirstName').val(),
+    lastName: $('#profileLastName').val(),
+    phone: $('#profilePhoneEdit').val(),
+    address: $('#profileAddressEdit').val()
+  };
+  
+  // Validate required fields
+  if (!profileData.firstName || !profileData.lastName) {
+    $('#profileErrorAlert').text('First name and last name are required').show();
+    return;
+  }
+  
+  // Show loading state
+  const saveBtn = $('#saveProfileBtn');
+  const originalBtnText = saveBtn.html();
+  saveBtn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...');
+  saveBtn.prop('disabled', true);
+  
+  // Clear previous alerts
+  $('#profileErrorAlert').hide();
+  $('#profileSuccessAlert').hide();
+  
+  // Get session token
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  let currentUser= JSON.parse(sessionStorage.getItem('currentUser'));
+
+  // Call server-side function
+  google.script.run
+    .withSuccessHandler(function(result) {
+      // Reset button state
+      saveBtn.html(originalBtnText);
+      saveBtn.prop('disabled', false);
+      
+      if (result.success) {
+        // Show success message
+        $('#profileSuccessAlert').text(result.message).show();
+        
+        // Reload profile data
+        loadProfileData();
+        
+        // Update user data in session storage
+
+        
+        // Update UI elements
+        updateUserInfo();
+      } else {
+        // Show error message
+        $('#profileErrorAlert').text(result.message).show();
+      }
+    })
+    .withFailureHandler(function(error) {
+      // Reset button state
+      saveBtn.html(originalBtnText);
+      saveBtn.prop('disabled', false);
+      
+      // Show error message
+      $('#profileErrorAlert').text('Error saving profile: ' + error).show();
+      console.error('Error saving profile:', error);
+    })
+    .updateProfile(currentUser.email, profileData);
+}
+
+
+/**
+ * Formats a date string
+ * @param {string} dateString - ISO date string
+ * @return {string} Formatted date string
+ */
+function formatDate(dateString) {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+}
+
+/**
+ * Formats a date-time string
+ * @param {string} dateString - ISO date string
+ * @return {string} Formatted date-time string
+ */
+function formatDateTime(dateString) {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+}
+/**
+ * Change password handler
+ */
+
+function showchangepassword(){
+  $('#changePasswordModal').modal('show');
+    $('#changePasswordBtn').on('click', function() {
+    changePassword();
+  });
+}
+function changePassword() {
+  
+  let currentUser= JSON.parse(sessionStorage.getItem('currentUser'));
+  console.log(currentUser.id);
+  // Get form values
+  const currentPassword = $('#currentPassword').val();
+  const newPassword = $('#newPassword').val();
+  const confirmPassword = $('#confirmPassword').val();
+  
+  // Clear previous alerts
+  $('#changePassErrorAlert').hide();
+  $('#changePassSuccessAlert').hide();
+  
+  // Validate passwords
+  if (!currentPassword || !newPassword || !confirmPassword) {
+    $('#changePassErrorAlert').text('All fields are required').show();
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    $('#changePassErrorAlert').text('New password and confirmation do not match').show();
+    return;
+  }
+  
+  if (!isValidPassword(newPassword)) {
+    $('#changePassErrorAlert').text('New password must be at least 8 characters and include uppercase, lowercase, and numbers').show();
+    return;
+  }
+  
+  // Show loading state
+  const btn = $('#changePasswordBtn');
+  const originalText = btn.html();
+  btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...');
+  btn.prop('disabled', true);
+  
+  // Get session token
+  const sessionToken = sessionStorage.getItem('sessionToken');
+  
+  // Call server-side function
+  google.script.run
+    .withSuccessHandler(function(result) {
+      // Reset button state
+      btn.html(originalText);
+      btn.prop('disabled', false);
+      
+      if (result.success) {
+        // Show success message
+        $('#changePassSuccessAlert').text(result.message).show();
+        
+        // Clear form
+        $('#changePasswordForm')[0].reset();
+        
+        // Close modal after a delay
+        setTimeout(function() {
+          $('#changePasswordModal').modal('hide');
+        }, 2000);
+      } else {
+        // Show error message
+        $('#changePassErrorAlert').text(result.message).show();
+      }
+    })
+    .withFailureHandler(function(error) {
+      // Reset button state
+      btn.html(originalText);
+      btn.prop('disabled', false);
+      
+      // Show error message
+      $('#changePassErrorAlert').text('An error occurred: ' + error).show();
+    })
+    .changePassword(currentUser.id, currentPassword, newPassword);
+}
+
+function isValidPassword(password) {
+  if (!password || password.length < 8) return false;
+  
+  // Check for at least one uppercase letter
+  if (!/[A-Z]/.test(password)) return false;
+  
+  // Check for at least one lowercase letter
+  if (!/[a-z]/.test(password)) return false;
+  
+  // Check for at least one number
+  if (!/[0-9]/.test(password)) return false;
+  
+  return true;
+}
+
+
+//tambahan
+
+// Gunakan event delegation — tidak butuh DOMContentLoaded
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'btnRegister') {
+
+    const successAlert = document.getElementById('registerSuccessAlert');
+    const errorAlert   = document.getElementById('registerErrorAlert');
+    const registerForm = document.getElementById('registerForm');
+    const btnRegister  = document.getElementById('btnRegister');
+
+    const firstName    = document.getElementById('regFirstName').value.trim();
+    const lastName     = document.getElementById('regLastName').value.trim();
+    const email        = document.getElementById('regEmail').value.trim();
+    const password     = document.getElementById('regPassword').value;
+    const confirmPassword = document.getElementById('regConfirmPassword').value;
+
+    successAlert.style.display = 'none';
+    errorAlert.style.display   = 'none';
+
+    if (!firstName || !lastName || !email || !password) {
+      errorAlert.textContent = 'Harap isi semua field wajib (Nama, Email, Password)';
+      errorAlert.style.display = 'block';
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      errorAlert.textContent = 'Password dan Konfirmasi Password tidak cocok';
+      errorAlert.style.display = 'block';
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      errorAlert.textContent = 'Format email tidak valid';
+      errorAlert.style.display = 'block';
+      return;
+    }
+
+    const userData = {
+      FirstName: firstName,
+      LastName:  lastName,
+      Email:     email,
+      Phone:     document.getElementById('regPhone').value.trim(),
+      Address:   document.getElementById('regAddress').value.trim(),
+      Password:  password
+    };
+
+    btnRegister.disabled    = true;
+    btnRegister.innerHTML   = '<span class="spinner-border spinner-border-sm"></span> Mendaftar...';
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        btnRegister.disabled  = false;
+        btnRegister.innerHTML = 'Daftar';
+
+        if (response.success) {
+          successAlert.textContent = response.message || 'Pendaftaran berhasil! Silakan login.';
+          successAlert.style.display = 'block';
+          registerForm.reset();
+
+          setTimeout(function() {
+            const modal = bootstrap.Modal.getInstance(
+              document.getElementById('registerModal')
+            );
+            if (modal) modal.hide();
+            successAlert.style.display = 'none';
+          }, 2000);
+
+        } else {
+          errorAlert.textContent = response.message || 'Gagal mendaftar. Coba lagi.';
+          errorAlert.style.display = 'block';
+        }
+      })
+      .withFailureHandler(function(error) {
+        btnRegister.disabled  = false;
+        btnRegister.innerHTML = 'Daftar';
+        errorAlert.textContent = 'Terjadi kesalahan: ' + (error.message || 'Unknown error');
+        errorAlert.style.display = 'block';
+      })
+      .registerNewUser(userData);
+  }
+});
+
+/*
+// FUngsi ini membuat error ketika klik send reset link lupa password Fungsi helper tampilkan alert
+function showAlert(element, message) {
+  element.textContent = message;
+  element.style.display = 'block';
+  setTimeout(() => {
+    element.style.display = 'none';
+  }, 5000);
+}
+*/
+
+
+
+// Validasi email sederhana
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+//tambahan pindah highlight
+// Fungsi untuk highlight menu yang aktif
+function setActiveMenu(menuId) {
+  // Hapus class active dari semua menu
+  document.querySelectorAll('#sidebarMenu li').forEach(li => {
+    li.classList.remove('active');
+  });
+
+  // Tambahkan class active ke menu yang dipilih
+  const activeItem = document.querySelector(`#sidebarMenu li[data-menu-id="${menuId}"]`);
+  if (activeItem) {
+    activeItem.classList.add('active');
+  }
+}
+
+
+
+//tambahan beda URL setiap halaman
+// DIUBAH / BARU DITAMBAHKAN di js/main.html
+// Pastikan highlight menu jalan setiap kali konten berubah
+document.addEventListener('DOMContentLoaded', function () {
+  // Cek URL saat load (untuk kasus langsung akses dari link)
+  const urlParams = new URLSearchParams(window.location.search);
+  const page = urlParams.get('page') || 'dashboard';
+  showSection(page);
+});
+
+// Pastikan setiap klik menu update URL
+// (sudah ditambahkan di showSection di login.html, tapi bisa diulang di sini kalau perlu)
+
+
+</script>
