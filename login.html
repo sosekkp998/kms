@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Management System - Login</title>
+  
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  
+  <!-- DataTables -->
+  <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <?!= include('css/styles'); ?>
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .login-container {
+      max-width: 400px;
+      margin: 100px auto;
+    }
+    .card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .card-header {
+      background-color: #4e73df;
+      color: white;
+      text-align: center;
+      border-radius: 10px 10px 0 0 !important;
+      padding: 20px;
+    }
+    .btn-primary {
+      background-color: #4e73df;
+      border-color: #4e73df;
+    }
+    .btn-primary:hover {
+      background-color: #2e59d9;
+      border-color: #2e59d9;
+    }
+    .login-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .form-floating {
+      margin-bottom: 1rem;
+    }
+    .alert {
+      display: none;
+    }
+    .hidden { display: none; }
+    .card-header {
+    background-color: #ffffff;
+    }
+    .toast {
+    background-color: rgb(159 209 231 / 85%);
+    }
+
+/*tambahan*/
+/* ================================================
+   Sidebar Hover Submenu
+   ================================================ */
+
+#sidebar {
+  //position: relative; /*tidak digunakan krn menyebabkan showtoast pop up ketika simpan role permission setting tidak berfungsi*/      /* penting agar submenu bisa absolute relative ke sidebar */
+  /*overflow: visible;  biar submenu tidak terpotong, tapi ternyata membuat scroll sidebar mati, jadi code ini tidak digunakan */
+  
+}
+
+#sidebarMenu > li {
+  position: relative;
+}
+
+#sidebarMenu a {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  color: #6e707e;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+#sidebarMenu a:hover,
+#sidebarMenu li.active > a {
+  background: #f8f9fc;
+  color: #4e73df;
+}
+
+/* Indikator child menu (panah ke kanan) */
+.has-submenu > a::after {
+  content: "\f105";               /* fa-chevron-right */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #adb5bd;
+  transition: transform 0.25s ease;
+}
+
+.has-submenu:hover > a::after {
+  transform: translateX(4px);
+}
+
+/* Submenu container */
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 180px;
+  background: #4b70dd !important;          /* putih pekat *//*biru muda*/
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  z-index: 1050 !important;                /* naikkan z-index */
+  padding: 8px 0;
+  margin: 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-8px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.submenu:hover,
+.has-submenu:hover > .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+/* Paksa warna teks submenu jadi gelap & jelas */
+.submenu li a {
+  color: #ffffff !important;               /* hitam pekat */
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  display: block;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.submenu li a:hover {
+  background: #e7f1ff !important;
+  color: #0d6efd !important;
+}
+
+/* Optional: garis pembatas halus di submenu */
+.submenu li:not(:last-child) {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+<div class="wrapper hidden" id="dashboardSection" >
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div class="sidebar-header">
+        <h3>KMS</h3>
+        <div class="sidebar-brand-icon">
+          <i class="fas fa-users-cog"></i>
+        </div>
+      </div>
+      
+      <div class="user-info">
+        <div class="user-avatar">
+          <img id="profileImagePreviewside" src="https://drive.google.com/thumbnail?id=1Zu2Vsuzuz_xGfImvysNVI01DzpIvR9tD?text=No+Image" alt="Profile" class="rounded-circle" style="width: 40px;height: 40px;">
+
+        </div>
+        <div class="user-details">
+          <h6 id="userFullName">Loading...</h6>
+          <span id="userRole" class="badge bg-primary">Loading...</span>
+        </div>
+      </div>
+      
+      <ul class="list-unstyled components" id="sidebarMenu">
+        <!-- Dynamic menu items will be loaded here -->
+        <li class="loading-item">
+          <a href="#"><i class="fas fa-spinner fa-spin"></i> Loading menu...</a>
+        </li>
+      </ul>
+    </nav>
+   <!-- Page Content -->
+    <div id="content">
+      <!-- Top Navigation -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <button type="button" id="sidebarCollapse" class="btn btn-primary">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-user me-1"></i> <span id="navUserName">User</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#" id="profileLink" onclick="event.preventDefault(); showSection('profile')"><i class="fas fa-id-card me-1"></i> My Profile</a></li>
+                  <li><a class="dropdown-item" href="#" id="changePasswordLink" onclick="event.preventDefault(); showchangepassword()"><i class="fas fa-key me-1"></i> Change Password</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#" id="logoutLink" onclick="event.preventDefault(); logout()"><i class="fas fa-sign-out-alt me-1"></i> Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Main Content -->
+      <div class="container-fluid" id="mainContent">
+
+      </div>
+    </div>
+  </div>
+
+</div>
+  <div class="container login-container hidden" id="loginSection">
+    <div class="card">
+      <div class="card-header" style="background-color: #4e73df;">
+        <i class="fas fa-users-cog login-icon"></i>
+        <h4>Knowledge Management System</h4>
+      </div>
+      <div class="card-body p-4">
+        <div class="alert alert-danger" id="errorAlert" role="alert"></div>
+        
+        <form id="loginForm">
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+            <label for="email">Email address</label>
+          </div>
+          
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" required>
+            <label for="password">Password</label>
+          </div>
+          
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary btn-lg">
+              <i class="fas fa-sign-in-alt me-2"></i> Login
+            </button>
+          </div>
+        </form>
+
+
+        
+<!-- Tambahan Form Login (sudah ada) -->
+        <div class="card-body">
+          <!-- Tambahkan tombol Register di sini -->
+          <div class="text-center mt-3">
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+              Register Akun Baru
+            </button>
+          </div>
+        </div>  
+
+
+
+        <div class="text-center mt-3">
+          <a href="#" id="forgotPasswordLinkd" onclick="event.preventDefault(); showSection('forgotPassword')">Forgot Password?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- ====================== -->
+<!-- Tambahan Modal Register Baru   -->
+<!-- ====================== -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel">Daftar Akun Baru</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="registerSuccessAlert" class="alert alert-success" style="display:none;"></div>
+        <div id="registerErrorAlert" class="alert alert-danger" style="display:none;"></div>
+
+        <form id="registerForm">
+          <div class="mb-3">
+            <label for="regFirstName" class="form-label">Nama Depan</label>
+            <input type="text" class="form-control" id="regFirstName" required>
+          </div>
+          <div class="mb-3">
+            <label for="regLastName" class="form-label">Nama Belakang</label>
+            <input type="text" class="form-control" id="regLastName" required>
+          </div>
+          <div class="mb-3">
+            <label for="regEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="regEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="regPhone" class="form-label">Nomor Telepon</label>
+            <input type="tel" class="form-control" id="regPhone">
+          </div>
+          <div class="mb-3">
+            <label for="regAddress" class="form-label">Alamat</label>
+            <textarea class="form-control" id="regAddress" rows="2"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="regPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="regPassword" required>
+          </div>
+          <div class="mb-3">
+            <label for="regConfirmPassword" class="form-label">Konfirmasi Password</label>
+            <input type="password" class="form-control" id="regConfirmPassword" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="btnRegister">Daftar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+    <!-- Change Password Modal -->
+  <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-danger" id="changePassErrorAlert" style="display: none;"></div>
+          <div class="alert alert-success" id="changePassSuccessAlert" style="display: none;"></div>
+          
+          <form id="changePasswordForm">
+            <div class="mb-3">
+              <label for="currentPassword" class="form-label">Current Password</label>
+              <input type="password" class="form-control" id="currentPassword" required>
+            </div>
+            <div class="mb-3">
+              <label for="newPassword" class="form-label">New Password</label>
+              <input type="password" class="form-control" id="newPassword" required>
+              <div class="form-text">Password must be at least 8 characters with upper and lowercase letters and numbers.</div>
+            </div>
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label">Confirm New Password</label>
+              <input type="password" class="form-control" id="confirmPassword" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="forgotPasswordModalLabel">
+          <i class="fas fa-key me-2"></i> Forgot Password
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="alert alert-danger" id="errorAlertforgot" role="alert"></div>
+        <div class="alert alert-success" id="successAlertforgot" role="alert"></div>
+
+        <form id="forgotPasswordForm">
+          <p class="mb-3 text-muted">Enter your email address and we'll send you a password reset link.</p>
+
+          <div class="form-floating mb-3">
+            <input type="email" class="form-control" id="emailforgot" placeholder="name@example.com" required>
+            <label for="email">Email address</label>
+          </div>
+
+          <div class="d-grid gap-2 mb-3">
+            <button type="button" class="btn btn-primary btn-lg" id="forgotBtn">
+              <i class="fas fa-paper-plane me-2"></i> Send Reset Link
+            </button>
+          </div>
+        </form>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-arrow-left me-2"></i> Back to Login
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="toast-container" class="toast-container position-fixed end-0 p-3"></div>
+
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+  
+    <!-- Custom JavaScript -->
+  <?!= include('js/main'); ?>
+  <script>
+    // Check for existing session
+    window.onload = function() {
+      // Create a hidden anchor tag if it doesn't exist
+    if (!document.getElementById('redirectLink')) {
+      const anchor = document.createElement('a');
+      anchor.id = 'redirectLink';
+      anchor.style.display = 'none';
+      anchor.target = '_top'; // Ensures it opens in the same frame
+      document.body.appendChild(anchor);
+    }
+
+
+      const sessionToken = sessionStorage.getItem('sessionToken');
+      if (sessionToken) {
+        // Validate session on the server
+        google.script.run
+          .withSuccessHandler(function(result) {
+            if (result) {
+              document.getElementById('loginSection').classList.add('hidden');
+              document.getElementById('dashboardSection').classList.remove('hidden');
+              showMenu(sessionStorage.getItem('menus'));
+              const userJson = sessionStorage.getItem('currentUser');
+              if (userJson) {
+                currentUser = JSON.parse(userJson);
+              }
+              const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  
+              // Update sidebar user info
+              $('#userFullName').text(fullName);
+              $('#userRole').text(currentUser.role.replace(/_/g, ' '));
+              
+              // Update navbar user name
+              $('#navUserName').text(currentUser.firstName);
+              $('#profileImagePreviewside').attr('src', currentUser.ProfileImage || 'https://drive.google.com/thumbnail?id=1Zu2Vsuzuz_xGfImvysNVI01DzpIvR9tD');
+              showSection('dashboard'); //load pertama kali saat web dibuka
+
+            } else {
+              document.getElementById('dashboardSection').classList.add('hidden');
+              document.getElementById('loginSection').classList.remove('hidden');
+              sessionStorage.removeItem('sessionToken');
+            }
+          })
+          .validateSession(sessionToken);
+      }else{
+              document.getElementById('dashboardSection').classList.add('hidden');
+              document.getElementById('loginSection').classList.remove('hidden');
+      }
+    };
+    
+    // Login form submission
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Show loading state
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const originalBtnText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Logging in...';
+      submitBtn.disabled = true;
+      
+      // Clear previous errors
+      document.getElementById('errorAlert').style.display = 'none';
+      
+      // Call server-side login function
+      google.script.run
+        .withSuccessHandler(function(result) {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+          if (result.success) {
+            // Store session token and user information
+            sessionStorage.setItem('sessionToken', result.token);
+            sessionStorage.setItem('currentUser', JSON.stringify(result.user));
+            sessionStorage.setItem('permissions', JSON.stringify(result.permissions));
+            sessionStorage.setItem('menus', JSON.stringify(result.menus));
+            sessionStorage.setItem('currentpage', "dashboard");
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            showMenu(sessionStorage.getItem('menus'));
+            showSection('dashboard');
+              const userJson = sessionStorage.getItem('currentUser');
+              if (userJson) {
+                currentUser = JSON.parse(userJson);
+              }
+              const fullName = `${currentUser.firstName} ${currentUser.lastName}`;
+  
+              // Update sidebar user info
+              $('#userFullName').text(fullName);
+              $('#userRole').text(currentUser.role.replace(/_/g, ' '));
+              $('#profileImagePreviewside').attr('src', currentUser.ProfileImage || 'https://drive.google.com/thumbnail?id=1Zu2Vsuzuz_xGfImvysNVI01DzpIvR9tD');
+              
+              // Update navbar user name
+              $('#navUserName').text(currentUser.firstName);
+          } else {
+            // Show error message
+            const errorAlert = document.getElementById('errorAlert');
+            errorAlert.textContent = result.message || 'Login failed. Please try again.';
+            errorAlert.style.display = 'block';
+            
+            // Reset form state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+          }
+        })
+        .withFailureHandler(function(error) {
+          // Show error message
+          const errorAlert = document.getElementById('errorAlert');
+          errorAlert.textContent = 'An error occurred during login. Please try again.';
+          errorAlert.style.display = 'block';
+          
+          // Reset form state
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+          
+          console.error('Login error:', error);
+        })
+        .login(email, password);
+    });
+
+function showMenu(menuDataStr) {
+  if (!menuDataStr) return;
+
+  try {
+    // Parse data menu dari server
+    // (asumsi format sudah benar, atau pakai replace jika masih pakai = )
+    const menuData = JSON.parse(menuDataStr.replace(/=/g, ':'));
+
+    if (!menuData.valid || !Array.isArray(menuData.menus)) {
+      console.error("Data menu tidak valid");
+      return;
+    }
+
+    const allMenus = menuData.menus.sort((a, b) => a.displayOrder - b.displayOrder);
+
+    let html = '';
+
+    allMenus.forEach(menu => {
+      // Hanya render parent (yang parentId null/kosong)
+      if (!menu.parentId) {
+        const hasChild = allMenus.some(child => child.parentId === menu.id);
+        const isActive = menu.id === sessionStorage.getItem('currentpage');
+        const className = hasChild ? 'has-submenu' : '';
+
+        html += `
+          <li class="${isActive ? 'active' : ''} ${className}">
+            <a href="#" onclick="event.preventDefault(); showSection('${menu.id}')">
+              <i class="fas ${menu.icon || 'fa-circle'} me-2"></i>
+              ${menu.name}
+            </a>`;
+
+        // Render submenu jika ada child
+        if (hasChild) {
+          html += `
+            <ul class="submenu list-unstyled">
+          `;
+
+          const children = allMenus
+            .filter(c => c.parentId === menu.id)
+            .sort((a, b) => a.displayOrder - b.displayOrder);
+
+          children.forEach(child => {
+            const childActive = child.id === sessionStorage.getItem('currentpage');
+            html += `
+              <li class="${childActive ? 'active' : ''}">
+                <a href="#" onclick="event.preventDefault(); showSection('${child.id}')">
+                  <i class="fas ${child.icon || 'fa-angle-right'} me-2"></i>
+                  ${child.name}
+                </a>
+              </li>
+            `;
+          });
+
+          html += `</ul>`;
+        }
+
+        html += `</li>`;
+      }
+    });
+
+    $('#sidebarMenu').html(html);
+
+    // Bonus: jika halaman saat ini adalah submenu, beri tanda active juga ke parent-nya
+    const current = sessionStorage.getItem('currentpage');
+    const currMenu = allMenus.find(m => m.id === current);
+    if (currMenu && currMenu.parentId) {
+      const parentName = allMenus.find(m => m.id === currMenu.parentId)?.name;
+      if (parentName) {
+        $(`#sidebarMenu li.has-submenu > a:contains("${parentName}")`)
+          .closest('li')
+          .addClass('active');
+      }
+    }
+
+  } catch (err) {
+    console.error("Error render menu:", err);
+    $('#sidebarMenu').html('<li><a href="#">Gagal memuat menu</a></li>');
+  }
+
+
+
+  
+}
+
+  function logout(){
+     const sessionToken = sessionStorage.getItem('sessionToken');
+    google.script.run
+    .withSuccessHandler(function(result) {
+        document.getElementById('dashboardSection').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
+        sessionStorage.removeItem('sessionToken');
+        })
+        .logout(sessionToken);
+  }
+
+/*tambahan
+$(document).ready(function () harus diletakkan di akhir /script agar semua komponen sudah load dulu baru bisa eksekusi hidden sidebar
+Toggle sidebar (jalankan sekali saat load)*/
+$(document).ready(function () {
+  // Pastikan tombol ada
+  const $toggleBtn = $('#sidebarCollapse');
+  if ($toggleBtn.length === 0) {
+    console.warn("Tombol #sidebarCollapse tidak ditemukan!");
+    return;
+  }
+
+  $toggleBtn.off('click').on('click', function (e) {
+    e.preventDefault();
+    $('#sidebar').toggleClass('active');
+    $('#content').toggleClass('active'); // kalau content perlu bergeser
+    console.log("Sidebar toggled, class active sekarang:", $('#sidebar').hasClass('active'));
+  });
+});
+
+
+
+
+
+
+
+
+  </script>
+</body>
+</html>
