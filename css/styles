@@ -1,0 +1,327 @@
+<style>
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  overflow-y: auto;                    /* body boleh scroll kalau perlu */
+}
+
+/**
+ * Employee Management System - Main Stylesheet
+ */
+
+/* General styles */
+:root {
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 80px; //atur lebar sidebar ketika hidden
+  --primary-color: #4e73df;
+  --secondary-color: #858796;
+  --success-color: #1cc88a;
+  --info-color: #36b9cc;
+  --warning-color: #f6c23e;
+  --danger-color: #e74a3b;
+  --light-color: #f8f9fc;
+  --dark-color: #5a5c69;
+}
+
+body {
+  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+    'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  background-color: #f8f9fc;
+  overflow-x: hidden;
+}
+
+/* Wrapper */
+.wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* Sidebar */
+#sidebar {
+  min-width: var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  background: #4e73df;
+  background: linear-gradient(180deg, #4e73df 10%, #224abe 100%);
+  color: #fff;
+  transition: all 0.3s;
+  /*position: fixed; jika dihapus menyebabkan pop up save Permission Setting permissionupdate succesfully tidak muncul, tetapi scroll sidebar aktif*/
+  top: 0;
+  left: 0;
+  /*height: 100vh; atau tinggi penuh 1 layar 100%, jika ini aktif maka ukuran panjang ke bawah sidebar akan terpotong walaupun tetap bisa scroll, jadi menu yang di bawah walaupun bisa discroll tetapi ga terlihat*/
+  z-index: 999;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+  
+  /*tambahan*/
+position: sticky;
+overflow: visible
+.sidebar-scroll {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+
+
+
+}
+
+#sidebar.active {
+  min-width: var(--sidebar-collapsed-width);
+  max-width: var(--sidebar-collapsed-width);
+  text-align: center;
+}
+
+#sidebar.active .sidebar-header h3,
+#sidebar.active .user-details,
+#sidebar.active .CTAs {
+  display: none;
+}
+
+#sidebar.active .sidebar-header {
+  padding: 20px 10px;
+}
+
+#sidebar.active .sidebar-brand-icon {
+  display: block;
+}
+
+#sidebar ul li a {
+  text-align: left;
+}
+
+#sidebar.active ul li a {
+  padding: 15px 10px;
+  text-align: center;
+  font-size: 0.85em;
+}
+
+#sidebar.active ul li a i {
+  margin-right: 0;
+  display: block;
+  font-size: 1.5em;
+  margin-bottom: 5px;
+}
+
+#sidebar.active ul ul a {
+  padding: 10px !important;
+}
+
+.sidebar-header {
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-brand-icon {
+  display: none;
+}
+
+#sidebar ul.components {
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#sidebar ul li a {
+  padding: 12px 20px;
+  font-size: 1em;
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.3s;
+  border-left: 3px solid transparent;
+}
+
+#sidebar ul li a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #fff;
+}
+
+#sidebar ul li.active > a {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #fff;
+  font-weight: 700;
+}
+
+#sidebar ul li a i {
+  margin-right: 10px;
+}
+
+.user-info {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+  font-size: 2rem;
+  margin-right: 15px;
+}
+
+.user-details h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.user-details .badge {
+  font-size: 0.7em;
+  margin-top: 3px;
+}
+
+/* Content */
+#content {
+  width: calc(100% - var(--sidebar-width));
+  min-height: 100vh;
+  transition: all 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+#content.active {
+  width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+/* Page Title */
+.page-title-box {
+  padding: 1.5rem 0;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 700;
+  color: #5a5c69;
+}
+
+.page-breadcrumb {
+  margin-top: 0.25rem;
+}
+
+.breadcrumb {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+}
+
+/* Cards */
+.card {
+  margin-bottom: 24px;
+  border: none;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.card-header h6 {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #4e73df;
+}
+
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+  border-left: 0.25rem solid #f6c23e !important;
+}
+
+.border-left-danger {
+  border-left: 0.25rem solid #e74a3b !important;
+}
+
+/* Dashboard Cards */
+.card .text-xs {
+  font-size: 0.7rem;
+}
+
+.card .text-gray-300 {
+  color: #dddfeb !important;
+}
+
+.card .text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+/* Tables */
+.table th {
+  font-weight: 600;
+}
+
+/* Forms */
+.form-control:focus {
+  border-color: #bac8f3;
+  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+/* Buttons */
+.btn-primary {
+  color: #fff;
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+.btn-primary:hover {
+  color: #fff;
+  background-color: #2e59d9;
+  border-color: #2653d4;
+}
+
+/* Profile Page */
+.profile-avatar {
+  color: #dddfeb;
+}
+
+.profile-info {
+  margin-top: 1.5rem;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+#sidebar {
+  overflow: visible !important;
+}
+
+  
+  #sidebar.active {
+    margin-left: 0;
+  }
+  
+  #content {
+    width: 100%;
+  }
+  
+  #content.active {
+    width: calc(100% - var(--sidebar-collapsed-width));
+  }
+  
+  #sidebarCollapse span {
+    display: none;
+  }
+
+  /*tambahan*/
+
+
+    
+</style>
